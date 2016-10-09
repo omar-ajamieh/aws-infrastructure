@@ -1,0 +1,21 @@
+---
+  - name: create and run wordpress docker image
+    hosts: finale-prod
+    user: ubuntu
+    sudo: true
+    gather_facts: False
+    tasks:
+    - name: create docker dir
+      file: path=/opt/docker state=directory
+    - name: copy docker files
+      copy: src=/opt/infrastructure/docker/Dockerfile dest=/opt/docker/Dockerfile
+    - name: copy runme script tostart nginx process
+      copy: src=/opt/infrastructure/docker/runme.sh dest=/opt/docker/runme.sh
+    - name: copy wordpress nginx config file
+      copy: src=/opt/infrastructure/docker/wordpress dest=/opt/docker/wordpress
+    - name: build docker image
+      shell:  docker build -t wordpress-nginx /opt/docker/
+    - name: run the docker container 
+      shell: docker run --name wordpress -p 80:80 --link mysql_ambassador:mysql -e WORDPRESS_DB_USER=infra -e WORDPRESS_DB_PASSWORD="Infra123qaz" -e WORDPRESS_DB_NAME=wordpress -d wordpress-nginx
+    - name: start the nginx inside the container
+      shell:  docker exec  wordpress bash /opt/runme.sh

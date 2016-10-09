@@ -1,0 +1,11 @@
+---
+  - name: create and run wordpress database
+    hosts: db-host
+    user: ubuntu
+    sudo: true
+    gather_facts: False
+    tasks:
+    - name: run wordpress db
+      shell:  docker run -d --name db -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=infra -e MYSQL_PASSWORD="Infra123qaz" -e MYSQL_DATABASE=wordpress mysql
+    - name: run mysql ambassador
+      shell: docker run -d --link db:db --name mysql_ambassador -p 3306:3306 svendowideit/ambassador

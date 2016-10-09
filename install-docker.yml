@@ -1,0 +1,23 @@
+---
+  - name: install docker
+    hosts: finale-prod
+    user: ubuntu
+    sudo: true
+    gather_facts: False
+    tasks:
+    - name: update apt
+      shell: apt-get update
+    - name: install apt-transport-https
+      shell: apt-get install apt-transport-https ca-certificates
+    - name: add key
+      shell: apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+    - name: add docker repo
+      shell: echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list
+    - name: update apt
+      shell: apt-get update
+    - name: install recommended packages
+      shell: apt-get install linux-image-extra-3.13.0-77-generic linux-image-extra-virtual -y
+    - name: install docker version 1.10
+      shell: apt-get install docker-engine=1.10.0-0~trusty -y
+    - name: start docker service
+      service: name=docker state=started

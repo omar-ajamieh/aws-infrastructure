@@ -1,0 +1,10 @@
+
+---
+  - name: link to the  wordpress database
+    hosts: not-dbhost
+    user: ubuntu
+    sudo: true
+    gather_facts: False
+    tasks:
+    - name: run wordpress db
+      shell: docker run -d --name mysql_ambassador --expose 3306 -e DB_PORT_3306_TCP=tcp://52.33.207.118:3306 svendowideit/ambassador

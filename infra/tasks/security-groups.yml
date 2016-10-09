@@ -1,0 +1,29 @@
+     - name: create EC2 instance security group
+       local_action:
+         module: ec2_group
+         region: "{{ REGION }}"
+         name: "{{ SEC_GROUP }}"
+         description: security group
+         rules:
+           - proto: tcp
+             from_port: 22
+             to_port: 22
+             cidr_ip: 0.0.0.0/0
+           - proto: tcp
+             from_port: 80
+             to_port: 80
+             cidr_ip: 0.0.0.0/0
+         rules_egress:
+           - proto: all
+             cidr_ip: 0.0.0.0/0
+     - name: create Public LB security group
+       local_action:
+         module: ec2_group
+         region: "{{ REGION }}"
+         name: PUBLB-sec
+         description: security group
+         rules:
+           - proto: tcp
+             from_port: 80
+             to_port: 80
+             cidr_ip: 0.0.0.0/0

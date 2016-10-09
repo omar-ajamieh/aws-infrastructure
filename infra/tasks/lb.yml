@@ -1,0 +1,13 @@
+- name: create public load balancer
+  local_action:
+    module: ec2_elb_lb
+    name: "PUBLIC-LB"
+    state: present
+    region: "{{ REGION }}"
+    zones:
+      - "{{ ZONE }}" 
+    security_group_names: PUBLB-sec
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80

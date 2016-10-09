@@ -1,0 +1,17 @@
+---
+    - name: create ec2 instances
+      local_action:
+        module: ec2
+        state: present
+        instance_type: "{{ INS_TYPE }}"
+        image: "{{ IMAGE }}"
+        region: "{{ REGION }}"
+        group: "{{ SEC_GROUP }}"
+        key_name: "{{ KEY }}"
+        zone: "{{ ZONE }}"
+        instance_tags:
+         Name: INFRA-{{ APP_NAME }}-{{ ENV }}-{{ ZONE }}
+         Function: "{{ APP_NAME }}"
+         ENV: "{{ ENV }}"
+        count: "{{ NUM_SERVERS }}"
+      register: ec2

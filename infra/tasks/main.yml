@@ -1,0 +1,4 @@
+---
+  - include: security-groups.yml
+  - include: ec2-create.yml
+  - include: lb.yml
